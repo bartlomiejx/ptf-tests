@@ -207,7 +207,7 @@ class TestOPIenv(BaseTest):
     def setUp(self):
         self.ssh_terminal = SSHTerminal(IPUStorageConfig())
         self.clone_requirements = \
-            F"git clone https://github.com/spdk/spdk --recursive &&"
+            F"git clone https://github.com/spdk/spdk --recursive && "
         F"git clone https://github.com/opiproject/opi-api && "
         F"git clone https://github.com/opiproject/opi-intel-bridge && "
         F"git clone https://github.com/opiproject/opi-spdk-bridge && "
@@ -228,6 +228,8 @@ class TestOPIenv(BaseTest):
         #
         # self.create_hugepages = \
         #     """echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"""
+
+
 
     def runTest(self):
         print(self.ssh_terminal.execute("ls"))
