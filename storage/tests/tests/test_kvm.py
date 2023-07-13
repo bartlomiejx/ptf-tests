@@ -230,16 +230,17 @@ class TestOPIenv(BaseTest):
 
     def runTest(self):
         print(self.ssh_terminal.execute("ls"))
+        # self.ssh_terminal.execute(
+        #     F"git clone https://github.com/spdk/spdk --recursive && "
+        #     F"git clone https://github.com/opiproject/opi-api && "
+        #     F"git clone https://github.com/opiproject/opi-intel-bridge && "
+        #     F"git clone https://github.com/opiproject/opi-spdk-bridge && "
+        #     F"git clone https://github.com/ipdk-io/ipdk")
+        # print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
-            F"git clone https://github.com/spdk/spdk --recursive && "
-            F"git clone https://github.com/opiproject/opi-api && "
-            F"git clone https://github.com/opiproject/opi-intel-bridge && "
-            F"git clone https://github.com/opiproject/opi-spdk-bridge && "
-            F"git clone https://github.com/ipdk-io/ipdk")
-        print(self.ssh_terminal.execute("ls"))
-        self.ssh_terminal.execute(
+            F"""sudo su && """
             F"""wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
-            F"""sudo rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
+            F"""rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
             F"""export PATH=$PATH:/usr/local/go/bin && """
             F"""spdk/scripts/setup.sh""")
         print(self.ssh_terminal.execute("ls"))
@@ -250,6 +251,7 @@ class TestOPIenv(BaseTest):
             """./configure --with-vfio-user && """
             """make && """)
         print(self.ssh_terminal.execute("ls"))
+        self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
 
 
         # self.ssh_terminal.execute(self.clone_requirements)
