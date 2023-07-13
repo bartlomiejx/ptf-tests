@@ -207,7 +207,7 @@ class TestOPIenv(BaseTest):
     def setUp(self):
         self.ssh_terminal = SSHTerminal(IPUStorageConfig())
         self.clone_requirements = \
-            F"""git clone https://github.com/spdk/spdk --recursive && """
+            F"""git clone https://github.com/spdk/spdk --recursive"""
         # F"""git clone https://github.com/opiproject/opi-api && """
         # F"""git clone https://github.com/opiproject/opi-intel-bridge && """
         # F"""git clone https://github.com/opiproject/opi-spdk-bridge && """
