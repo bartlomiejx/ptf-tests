@@ -223,10 +223,16 @@ class TestOPIenv(BaseTest):
         # """dnf install kernel-headers && """
         # """./scripts/pkgdep.sh && """
         # """./configure --with-vfio-user && """
-        # """make && """
+        # """make """
         #
+        # self.run_kvm_server(
+        #     f"cd opi-spdk-bridge &&"
+        #     f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052"
+        # )
         # self.create_hugepages = \
         #     """echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"""
+        self.run_spdk_sock = \
+            "./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3"
 
     def runTest(self):
         print(self.ssh_terminal.execute("ls"))
@@ -244,15 +250,19 @@ class TestOPIenv(BaseTest):
             F"""export PATH=$PATH:/usr/local/go/bin && """
             F"""spdk/scripts/setup.sh""")
         print(self.ssh_terminal.execute("ls"))
+        self.ssh_terminal.execute(f"cd opi-spdk-bridge &&"
+                                  f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052")
+        print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
             """cd spdk && """
             """dnf install kernel-headers && """
             """./scripts/pkgdep.sh && """
             """./configure --with-vfio-user && """
-            """make && """)
+            """make""")
         print(self.ssh_terminal.execute("ls"))
-        self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
 
+        self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
+        print(self.ssh_terminal.execute("ls"))
 
         # self.ssh_terminal.execute(self.clone_requirements)
         # self.ssh_terminal.execute(self.download_install_go)
