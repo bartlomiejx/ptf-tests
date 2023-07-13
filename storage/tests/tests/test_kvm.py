@@ -230,10 +230,11 @@ class TestOPIenv(BaseTest):
             """echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"""
 
     def runTest(self):
+        print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(self.clone_requirements)
+        print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(self.download_install_go)
         self.ssh_terminal.execute(self.install_spdk_orerequisites)
         self.ssh_terminal.execute(self.create_hugepages)
-
     def tearDown(self):
         pass
