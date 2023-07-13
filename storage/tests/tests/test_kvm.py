@@ -206,8 +206,7 @@ BaseTest = import_base_test(target)
 class TestOPIenv(BaseTest):
     def setUp(self):
         self.ssh_terminal = SSHTerminal(IPUStorageConfig())
-        self.clone_requirements = \
-            F"git clone https://github.com/spdk/spdk --recursive && "
+        self.clone_requirements = F"git clone https://github.com/spdk/spdk --recursive && "
         F"git clone https://github.com/opiproject/opi-api && "
         F"git clone https://github.com/opiproject/opi-intel-bridge && "
         F"git clone https://github.com/opiproject/opi-spdk-bridge && "
@@ -231,14 +230,14 @@ class TestOPIenv(BaseTest):
 
     def runTest(self):
         print(self.ssh_terminal.execute("ls"))
-        self.ssh_terminal.execute(
-            F"git clone https://github.com/spdk/spdk --recursive && "
-            F"git clone https://github.com/opiproject/opi-api && "
-            F"git clone https://github.com/opiproject/opi-intel-bridge && "
-            F"git clone https://github.com/opiproject/opi-spdk-bridge && "
-            F"git clone https://github.com/ipdk-io/ipdk")
+        # self.ssh_terminal.execute(
+        #     F"git clone https://github.com/spdk/spdk --recursive && "
+        #     F"git clone https://github.com/opiproject/opi-api && "
+        #     F"git clone https://github.com/opiproject/opi-intel-bridge && "
+        #     F"git clone https://github.com/opiproject/opi-spdk-bridge && "
+        #     F"git clone https://github.com/ipdk-io/ipdk")
 
-        # self.ssh_terminal.execute(self.clone_requirements)
+        self.ssh_terminal.execute(self.clone_requirements)
         print(self.ssh_terminal.execute("ls"))
         # self.ssh_terminal.execute(self.download_install_go)
         # self.ssh_terminal.execute(self.install_spdk_orerequisites)
