@@ -239,7 +239,7 @@ class TestOPIenv(BaseTest):
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
             F"""wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
-            F"""rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
+            F"""sudo rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
             F"""export PATH=$PATH:/usr/local/go/bin && """
             F"""spdk/scripts/setup.sh""")
         print(self.ssh_terminal.execute("ls"))
