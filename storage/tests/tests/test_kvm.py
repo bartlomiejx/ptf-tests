@@ -208,33 +208,33 @@ class TestOPIenv(BaseTest):
         self.ssh_terminal = SSHTerminal(IPUStorageConfig())
         self.clone_requirements = \
             F"""git clone https://github.com/spdk/spdk --recursive && """
-        F"""git clone https://github.com/opiproject/opi-api && """
-        F"""git clone https://github.com/opiproject/opi-intel-bridge && """
-        F"""git clone https://github.com/opiproject/opi-spdk-bridge && """
-        F"""git clone https://github.com/ipdk-io/ipdk && """
+        # F"""git clone https://github.com/opiproject/opi-api && """
+        # F"""git clone https://github.com/opiproject/opi-intel-bridge && """
+        # F"""git clone https://github.com/opiproject/opi-spdk-bridge && """
+        # F"""git clone https://github.com/ipdk-io/ipdk && """
 
-        self.download_install_go = \
-            F"""wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
-        F"""rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
-        F"""export PATH=$PATH:/usr/local/go/bin && """
-        F"""spdk/scripts/setup.sh && """
-
-        self.install_spdk_orerequisites = \
-            """cd spdk && """
-        """dnf install kernel-headers && """
-        """./scripts/pkgdep.sh && """
-        """./configure --with-vfio-user && """
-        """make && """
-
-        self.create_hugepages = \
-            """echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"""
+        # self.download_install_go = \
+        #     F"""wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
+        # F"""rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
+        # F"""export PATH=$PATH:/usr/local/go/bin && """
+        # F"""spdk/scripts/setup.sh && """
+        #
+        # self.install_spdk_orerequisites = \
+        #     """cd spdk && """
+        # """dnf install kernel-headers && """
+        # """./scripts/pkgdep.sh && """
+        # """./configure --with-vfio-user && """
+        # """make && """
+        #
+        # self.create_hugepages = \
+        #     """echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"""
 
     def runTest(self):
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(self.clone_requirements)
         print(self.ssh_terminal.execute("ls"))
-        self.ssh_terminal.execute(self.download_install_go)
-        self.ssh_terminal.execute(self.install_spdk_orerequisites)
-        self.ssh_terminal.execute(self.create_hugepages)
+        # self.ssh_terminal.execute(self.download_install_go)
+        # self.ssh_terminal.execute(self.install_spdk_orerequisites)
+        # self.ssh_terminal.execute(self.create_hugepages)
     def tearDown(self):
         pass
