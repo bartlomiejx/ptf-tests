@@ -207,11 +207,11 @@ class TestOPIenv(BaseTest):
     def setUp(self):
         self.ssh_terminal = SSHTerminal(IPUStorageConfig())
         self.clone_requirements = \
-            F"""git clone https://github.com/spdk/spdk --recursive"""
-        # F"""git clone https://github.com/opiproject/opi-api && """
-        # F"""git clone https://github.com/opiproject/opi-intel-bridge && """
-        # F"""git clone https://github.com/opiproject/opi-spdk-bridge && """
-        # F"""git clone https://github.com/ipdk-io/ipdk && """
+            F"git clone https://github.com/spdk/spdk --recursive"
+        F"git clone https://github.com/opiproject/opi-api && "
+        F"git clone https://github.com/opiproject/opi-intel-bridge && "
+        F"git clone https://github.com/opiproject/opi-spdk-bridge && "
+        F"git clone https://github.com/ipdk-io/ipdk"
 
         # self.download_install_go = \
         #     F"""wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
