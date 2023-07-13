@@ -206,6 +206,8 @@ BaseTest = import_base_test(target)
 class TestOPIenv(BaseTest):
     def setUp(self):
         self.ssh_terminal = SSHTerminal(IPUStorageConfig())
+        self.ssh_terminal2 = SSHTerminal(IPUStorageConfig())
+        self.ssh_terminal3 = SSHTerminal(IPUStorageConfig())
         # self.clone_requirements = F"git clone https://github.com/spdk/spdk --recursive && "
         # F"git clone https://github.com/opiproject/opi-api && "
         # F"git clone https://github.com/opiproject/opi-intel-bridge && "
@@ -233,7 +235,14 @@ class TestOPIenv(BaseTest):
         #     """echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"""
         self.run_spdk_sock = \
             "./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3"
-
+        self.run_spdk_sock2 = "./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x20 -r /var/tmp/spdk2.sock"
+        self.create_transports = \
+        f"cd spdk/scripts/ && " \
+        f"./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t tcp && " \
+        f"./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t vfiouser && " \
+        f"./rpc.py nvmf_create_transport -t tcp && " \
+        f"./rpc.py nvmf_create_transport -t vfiouser && " \
+        f"cd -"
     def runTest(self):
         print(self.ssh_terminal.execute("ls"))
         # self.ssh_terminal.execute(
@@ -250,8 +259,6 @@ class TestOPIenv(BaseTest):
             F"""export PATH=$PATH:/usr/local/go/bin && """
             F"""spdk/scripts/setup.sh""")
         print(self.ssh_terminal.execute("ls"))
-        self.ssh_terminal.execute(f"cd opi-spdk-bridge &&"
-                                  f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052")
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
             """cd spdk && """
@@ -260,12 +267,16 @@ class TestOPIenv(BaseTest):
             """./configure --with-vfio-user && """
             """make""")
         print(self.ssh_terminal.execute("ls"))
+        self.ssh_terminal.execute(f"cd opi-spdk-bridge &&"
+                                  f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052")
         self.ssh_terminal.execute(
             f"cd opi-spdk-bridge &&"
             f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052"
         )
-        self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
-        print(self.ssh_terminal.execute("ls"))
+
+        print(self.ssh_terminal2.execute("ls"))
+        self.ssh_terminal2.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
+        print(self.ssh_terminal2.execute("ls"))
 
         # self.ssh_terminal.execute(self.clone_requirements)
         # self.ssh_terminal.execute(self.download_install_go)
