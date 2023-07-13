@@ -260,7 +260,10 @@ class TestOPIenv(BaseTest):
             """./configure --with-vfio-user && """
             """make""")
         print(self.ssh_terminal.execute("ls"))
-
+        self.ssh_terminal.execute(
+            f"cd opi-spdk-bridge &&"
+            f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052"
+        )
         self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
         print(self.ssh_terminal.execute("ls"))
 
