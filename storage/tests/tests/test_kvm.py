@@ -243,40 +243,56 @@ class TestOPIenv(BaseTest):
         f"./rpc.py nvmf_create_transport -t tcp && " \
         f"./rpc.py nvmf_create_transport -t vfiouser && " \
         f"cd -"
+
+        self.create_vm = \
+        f"/ipdk/build/storage/scripts/vm/install_qemu.sh && " \
+        f"./ipdk/build/storage/scripts/vm/run_vm.sh"
+
+        self.newterminal_mallock = \
+        f"""export BRIDGE_ADDR="127.0.0.1:50052" """
+
+        self.create_mallock= \
+        f"cd spdk/scripts && "
+        f"./rpc.py bdev_malloc_create -b Malloc0 16 4096"
+
+        # self.send_opi_cmd_to_vm = \
+        # f"""env -i grpc_cli --json_input --json_output call $BRIDGE_ADDR CreateVirtioBlk "{virtio_blk_id: 'virtioblk0',virtio_blk : { volume_id: {"""
+        # f"""value: 'Malloc0'}, pcie_id: { physical_function: '0'} }}""""
+
+        self.is_vm_created = f"ls /dev/vd*"
     def runTest(self):
         print(self.ssh_terminal.execute("ls"))
-        # self.ssh_terminal.execute(
-        #     F"git clone https://github.com/spdk/spdk --recursive && "
-        #     F"git clone https://github.com/opiproject/opi-api && "
-        #     F"git clone https://github.com/opiproject/opi-intel-bridge && "
-        #     F"git clone https://github.com/opiproject/opi-spdk-bridge && "
-        #     F"git clone https://github.com/ipdk-io/ipdk")
-        # print(self.ssh_terminal.execute("ls"))
+        self.ssh_terminal.execute(
+            F"git clone https://github.com/spdk/spdk --recursive && "
+            F"git clone https://github.com/opiproject/opi-api && "
+            F"git clone https://github.com/opiproject/opi-intel-bridge && "
+            F"git clone https://github.com/opiproject/opi-spdk-bridge && "
+            F"git clone https://github.com/ipdk-io/ipdk")
+        print(self.ssh_terminal.execute("ls"))
+        print(self.ssh_terminal.execute("ls"))
+        print(self.ssh_terminal.execute("ls"))
+        self.ssh_terminal.execute(
+            F"sudo dnf install docker-ce docker-ce-cli containerd.io libguestfs-tools-c grpc-cli"
+        )
+
+        self.ssh_terminal.execute(
+            """cd spdk && """
+            """dnf install kernel-headers && """
+            """bash ./scripts/pkgdep.sh && """
+            """./configure --with-vfio-user && """
+            """make""")
+        ###~~~~5 min wait time
         self.ssh_terminal.execute(
             F"""sudo su && """
             F"""wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
             F"""rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
-            F"""export PATH=$PATH:/usr/local/go/bin && """
-            F"""spdk/scripts/setup.sh""")
-        print(self.ssh_terminal.execute("ls"))
-        print(self.ssh_terminal.execute("ls"))
-        self.ssh_terminal.execute(
-            """cd spdk && """
-            """dnf install kernel-headers && """
-            """./scripts/pkgdep.sh && """
-            """./configure --with-vfio-user && """
-            """make""")
+            F"""export PATH=$PATH:/usr/local/go/bin""")
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(f"cd opi-spdk-bridge &&"
-                                  f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052")
-        self.ssh_terminal.execute(
-            f"cd opi-spdk-bridge &&"
-            f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052"
-        )
-
-        print(self.ssh_terminal2.execute("ls"))
-        self.ssh_terminal2.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
-        print(self.ssh_terminal2.execute("ls"))
+                                  f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052 &")
+        print(self.ssh_terminal.execute("ls"))
+        self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
+        print(self.ssh_terminal.execute("ls"))
 
         # self.ssh_terminal.execute(self.clone_requirements)
         # self.ssh_terminal.execute(self.download_install_go)
