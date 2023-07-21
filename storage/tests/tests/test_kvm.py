@@ -201,7 +201,7 @@ BaseTest = import_base_test(target)
 #         self.ipu_storage_platform.clean()
 #         self.storage_target_platform.clean()
 #         self.host_target_platform.clean()
-
+#
 
 class TestOPIenv(BaseTest):
     def setUp(self):
@@ -268,8 +268,6 @@ class TestOPIenv(BaseTest):
             F"git clone https://github.com/opiproject/opi-spdk-bridge && "
             F"git clone https://github.com/ipdk-io/ipdk")
         print(self.ssh_terminal.execute("ls"))
-        print(self.ssh_terminal.execute("ls"))
-        print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
             F"sudo dnf install docker-ce docker-ce-cli containerd.io libguestfs-tools-c grpc-cli"
         )
@@ -292,6 +290,8 @@ class TestOPIenv(BaseTest):
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
         print(self.ssh_terminal.execute("ls"))
+        self.ssh_terminal.execute("./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3 &")
+        self.ssh_terminal.execute("./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x20 -r /var/tmp/spdk2.sock &")
 
         # self.ssh_terminal.execute(self.clone_requirements)
         # self.ssh_terminal.execute(self.download_install_go)
