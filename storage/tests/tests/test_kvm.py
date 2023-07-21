@@ -205,7 +205,7 @@ BaseTest = import_base_test(target)
 
 class TestOPIenv(BaseTest):
     def setUp(self):
-        self.ssh_terminal = SSHTerminal(IPUStorageConfig())
+        # self.ssh_terminal = SSHTerminal(IPUStorageConfig())
         # self.clone_requirements = F"git clone https://github.com/spdk/spdk --recursive && "
         # F"git clone https://github.com/opiproject/opi-api && "
         # F"git clone https://github.com/opiproject/opi-intel-bridge && "
@@ -231,33 +231,34 @@ class TestOPIenv(BaseTest):
         # )
         # self.create_hugepages = \
         #     """echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"""
-        self.run_spdk_sock = \
-            "./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3"
-        self.run_spdk_sock2 = "./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x20 -r /var/tmp/spdk2.sock"
-        self.create_transports = \
-        f"cd spdk/scripts/ && " \
-        f"./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t tcp && " \
-        f"./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t vfiouser && " \
-        f"./rpc.py nvmf_create_transport -t tcp && " \
-        f"./rpc.py nvmf_create_transport -t vfiouser && " \
-        f"cd -"
-
-        self.create_vm = \
-        f"/ipdk/build/storage/scripts/vm/install_qemu.sh && " \
-        f"./ipdk/build/storage/scripts/vm/run_vm.sh"
-
-        self.newterminal_mallock = \
-        f"""export BRIDGE_ADDR="127.0.0.1:50052" """
-
-        self.create_mallock= \
-        f"cd spdk/scripts && "
-        f"./rpc.py bdev_malloc_create -b Malloc0 16 4096"
+        # self.run_spdk_sock = \
+        #     "./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3"
+        # self.run_spdk_sock2 = "./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x20 -r /var/tmp/spdk2.sock"
+        # self.create_transports = \
+        # f"cd spdk/scripts/ && " \
+        # f"./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t tcp && " \
+        # f"./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t vfiouser && " \
+        # f"./rpc.py nvmf_create_transport -t tcp && " \
+        # f"./rpc.py nvmf_create_transport -t vfiouser && " \
+        # f"cd -"
+        #
+        # self.create_vm = \
+        # f"/ipdk/build/storage/scripts/vm/install_qemu.sh && " \
+        # f"./ipdk/build/storage/scripts/vm/run_vm.sh"
+        #
+        # self.newterminal_mallock = \
+        # f"""export BRIDGE_ADDR="127.0.0.1:50052" """
+        #
+        # self.create_mallock= \
+        # f"cd spdk/scripts && "
+        # f"./rpc.py bdev_malloc_create -b Malloc0 16 4096"
 
         # self.send_opi_cmd_to_vm = \
         # f"""env -i grpc_cli --json_input --json_output call $BRIDGE_ADDR CreateVirtioBlk "{virtio_blk_id: 'virtioblk0',virtio_blk : { volume_id: {"""
         # f"""value: 'Malloc0'}, pcie_id: { physical_function: '0'} }}""""
 
         self.is_vm_created = f"ls /dev/vd*"
+
     def runTest(self):
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
