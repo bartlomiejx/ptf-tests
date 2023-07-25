@@ -275,7 +275,7 @@ class TestOPIenv(BaseTest):
 
         self.ssh_terminal.execute(
             """cd /home/berta/spdk && """
-            """sudo dnf install kernel-headers && """
+            """sudo dnf install kernel-headers -y && """
             """sudo bash ./scripts/pkgdep.sh && """
             """./configure --with-vfio-user && """
             """make""")
