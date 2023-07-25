@@ -271,24 +271,30 @@ class TestOPIenv(BaseTest):
         self.ssh_terminal.execute(
             F"sudo dnf install docker-ce docker-ce-cli containerd.io libguestfs-tools-c grpc-cli"
         )
+        print(self.ssh_terminal.execute("echo dock installed"))
 
         self.ssh_terminal.execute(
-            """cd spdk && """
+            """cd /home/berta/spdk && """
             """sudo dnf install kernel-headers && """
             """sudo bash ./scripts/pkgdep.sh && """
             """./configure --with-vfio-user && """
             """make""")
+        print(self.ssh_terminal.execute("echo installed kernel, configured"))
+
         ###~~~~5 min wait time
         self.ssh_terminal.execute(
             F"""sudo su && """
             F"""wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
             F"""rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
             F"""export PATH=$PATH:/usr/local/go/bin""")
+        print(self.ssh_terminal.execute("installed go"))
+
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
             f"cd /home/berta/opi-spdk-bridge &&"
             f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052 &"
         )
+
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
         print(self.ssh_terminal.execute("ls"))
