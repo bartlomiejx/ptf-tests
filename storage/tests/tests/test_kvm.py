@@ -274,8 +274,8 @@ class TestOPIenv(BaseTest):
 
         self.ssh_terminal.execute(
             """cd spdk && """
-            """dnf install kernel-headers && """
-            """bash ./scripts/pkgdep.sh && """
+            """sudo dnf install kernel-headers && """
+            """sudo bash ./scripts/pkgdep.sh && """
             """./configure --with-vfio-user && """
             """make""")
         ###~~~~5 min wait time
@@ -285,13 +285,29 @@ class TestOPIenv(BaseTest):
             F"""rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
             F"""export PATH=$PATH:/usr/local/go/bin""")
         print(self.ssh_terminal.execute("ls"))
-        self.ssh_terminal.execute(f"cd opi-spdk-bridge &&"
-                                  f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052 &")
+        self.ssh_terminal.execute(
+            f"cd /home/berta/opi-spdk-bridge &&"
+            f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052 &"
+        )
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
         print(self.ssh_terminal.execute("ls"))
-        self.ssh_terminal.execute("./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3 &")
-        self.ssh_terminal.execute("./spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x20 -r /var/tmp/spdk2.sock &")
+        self.ssh_terminal.execute("/home/berta/spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3 &")
+        self.ssh_terminal.execute("/home/berta/spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x20 -r /var/tmp/spdk2.sock &")
+        self.ssh_terminal.execute("cd /home/berta/spdk/scripts/")
+        self.ssh_terminal.execute("./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t tcp")
+        self.ssh_terminal.execute("./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t vfiouser")
+        self.ssh_terminal.execute("./rpc.py nvmf_create_transport -t tcp")
+        self.ssh_terminal.execute("./rpc.py nvmf_create_transport -t vfiouser")
+        self.ssh_terminal.execute("cd -")
+
+        self.ssh_terminal.execute("/home/berta/spdk/scripts/rpc.py bdev_malloc_create -b Malloc0 16 4096 &")
+
+        ##send opi cmd to vm
+#env -i grpc_cli --json_input --json_output call $BRIDGE_ADDR CreateVirtioBlk "{virtio_blk_id: 'virtioblk0',virtio_blk : { volume_id: {
+#value: 'Malloc0'}, pcie_id: { physical_function: '0'} }}"
+        ##check test:
+#ls /dev/vd*
 
         # self.ssh_terminal.execute(self.clone_requirements)
         # self.ssh_terminal.execute(self.download_install_go)
