@@ -283,9 +283,9 @@ class TestOPIenv(BaseTest):
 
         ###~~~~5 min wait time
         self.ssh_terminal.execute(
-            F"""sudo su && wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
-            F"""rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
-            F"""export PATH=$PATH:/usr/local/go/bin""")
+            F"""sudo wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
+            F"""sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
+            F"""sudo export PATH=$PATH:/usr/local/go/bin""")
         print(self.ssh_terminal.execute("installed go"))
 
         print(self.ssh_terminal.execute("ls"))
