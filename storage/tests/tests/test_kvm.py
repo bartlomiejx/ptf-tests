@@ -294,7 +294,7 @@ class TestOPIenv(BaseTest):
             f"sudo go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052 &"
         )
 
-        print(self.ssh_terminal.execute("go runned kvm port 50052"))
+        print(self.ssh_terminal.execute("echo go runned kvm port 50052"))
         self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute("/home/berta/spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3 &")
