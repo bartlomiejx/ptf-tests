@@ -295,7 +295,7 @@ class TestOPIenv(BaseTest):
         )
 
         print(self.ssh_terminal.execute("echo go runned kvm port 50052"))
-        self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
+        self.ssh_terminal.execute("sudo su && echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages && echo whoami")
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute("/home/berta/spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3 &")
         self.ssh_terminal.execute("/home/berta/spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x20 -r /var/tmp/spdk2.sock &")
