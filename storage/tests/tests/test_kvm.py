@@ -286,15 +286,15 @@ class TestOPIenv(BaseTest):
             F"""sudo wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && """
             F"""sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && """
             F"""export PATH=$PATH:/usr/local/go/bin""")
-        print(self.ssh_terminal.execute("installed go"))
+        print(self.ssh_terminal.execute("echo installed go"))
 
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
             f"cd /home/berta/opi-spdk-bridge &&"
-            f"go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052 &"
+            f"sudo go run ./cmd -ctrlr_dir=/var/tmp -kvm -port 50052 &"
         )
 
-        print(self.ssh_terminal.execute("ls"))
+        print(self.ssh_terminal.execute("go runned kvm port 50052"))
         self.ssh_terminal.execute("echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute("/home/berta/spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3 &")
