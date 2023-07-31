@@ -278,7 +278,7 @@ class TestOPIenv(BaseTest):
             """sudo dnf install kernel-headers -y && """
             """sudo bash ./scripts/pkgdep.sh && """
             """./configure --with-vfio-user && """
-            """make""")
+            """make &""")
         print(self.ssh_terminal.execute("echo installed kernel, configured"))
 
         ###~~~~5 min wait time
