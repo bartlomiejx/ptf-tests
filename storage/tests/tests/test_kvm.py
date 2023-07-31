@@ -269,7 +269,7 @@ class TestOPIenv(BaseTest):
             F"git clone https://github.com/ipdk-io/ipdk")
         print(self.ssh_terminal.execute("ls"))
         self.ssh_terminal.execute(
-            F"sudo dnf install docker-ce docker-ce-cli containerd.io libguestfs-tools-c grpc-cli"
+            F"sudo dnf install docker-ce docker-ce-cli containerd.io libguestfs-tools-c grpc-cli -y"
         )
         print(self.ssh_terminal.execute("echo dock installed"))
 
