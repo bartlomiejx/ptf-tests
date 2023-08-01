@@ -295,18 +295,20 @@ class TestOPIenv(BaseTest):
         )
 
         print(self.ssh_terminal.execute("echo go runned kvm port 50052"))
-        self.ssh_terminal.execute("sudo su && echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages && echo whoami")
-        print(self.ssh_terminal.execute("ls"))
+        self.ssh_terminal.execute("sudo su && echo 4096 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages")
+        print(self.ssh_terminal.execute("echo ls /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"))
         self.ssh_terminal.execute("/home/berta/spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x3 &")
+        print(self.ssh_terminal.execute("echo 0x3 executed"))
         self.ssh_terminal.execute("/home/berta/spdk/build/bin/spdk_tgt -S /var/tmp -s 1024 -m 0x20 -r /var/tmp/spdk2.sock &")
-        self.ssh_terminal.execute("cd /home/berta/spdk/scripts/")
-        self.ssh_terminal.execute("./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t tcp")
-        self.ssh_terminal.execute("./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t vfiouser")
-        self.ssh_terminal.execute("./rpc.py nvmf_create_transport -t tcp")
-        self.ssh_terminal.execute("./rpc.py nvmf_create_transport -t vfiouser")
-        self.ssh_terminal.execute("cd -")
-
+        print(self.ssh_terminal.execute("echo executed sock"))
+        self.ssh_terminal.execute(F"cd /home/berta/spdk/scripts/ &&"
+                                  F" ./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t tcp &&"
+                                  F"./rpc.py -s /var/tmp/spdk2.sock nvmf_create_transport -t vfiouser &&"
+                                  F"./rpc.py nvmf_create_transport -t tcp &&"
+                                  F"./rpc.py nvmf_create_transport -t vfiouser")
+        print(self.ssh_terminal.execute("echo created transports"))
         self.ssh_terminal.execute("/home/berta/spdk/scripts/rpc.py bdev_malloc_create -b Malloc0 16 4096 &")
+        print(self.ssh_terminal.execute("echo created mallloc0"))
 
         ##send opi cmd to vm
 #env -i grpc_cli --json_input --json_output call $BRIDGE_ADDR CreateVirtioBlk "{virtio_blk_id: 'virtioblk0',virtio_blk : { volume_id: {
